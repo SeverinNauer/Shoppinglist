@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppinglist", "Shoppinglist\Shoppinglist.csproj", "{154D754E-FBCD-420D-AAA2-43A2ADE6071C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppinglist-Data", "Shoppinglist-Data\Shoppinglist-Data.csproj", "{B54BBE2A-DE0A-4BE9-A0C6-B17BDFA1C69D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{154D754E-FBCD-420D-AAA2-43A2ADE6071C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{154D754E-FBCD-420D-AAA2-43A2ADE6071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{154D754E-FBCD-420D-AAA2-43A2ADE6071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{154D754E-FBCD-420D-AAA2-43A2ADE6071C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54BBE2A-DE0A-4BE9-A0C6-B17BDFA1C69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54BBE2A-DE0A-4BE9-A0C6-B17BDFA1C69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54BBE2A-DE0A-4BE9-A0C6-B17BDFA1C69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54BBE2A-DE0A-4BE9-A0C6-B17BDFA1C69D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {040A8AFD-A156-4814-8FD5-A54D2AB3C902}
+	EndGlobalSection
+EndGlobal
