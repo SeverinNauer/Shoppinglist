@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
@@ -28,7 +27,7 @@ namespace Digitalist.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Create([FromBody]LoginModel model)
         {
-            var user = new User(model.Username, model.Password);
+            var user = Digitalist_Data.Models.User.CreateNew(model.Username, model.Password);
             var result = _userService.AddToDb(user);
             if (result.Type == ResultType.Success)
             {

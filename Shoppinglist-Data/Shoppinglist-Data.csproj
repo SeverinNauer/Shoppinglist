@@ -10,6 +10,10 @@
     <Compile Remove="Migrations\20200112113011_Init.Designer.cs" />
     <Compile Remove="Migrations\20200112113102_InitDigitalist.cs" />
     <Compile Remove="Migrations\20200112113102_InitDigitalist.Designer.cs" />
+    <Compile Remove="Migrations\20200114205122_shoppinglistInContext.cs" />
+    <Compile Remove="Migrations\20200114205122_shoppinglistInContext.Designer.cs" />
+    <Compile Remove="Migrations\20200114205507_updatecontext.cs" />
+    <Compile Remove="Migrations\20200114205507_updatecontext.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

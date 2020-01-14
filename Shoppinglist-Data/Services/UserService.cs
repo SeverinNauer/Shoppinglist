@@ -16,6 +16,7 @@ namespace Digitalist_Data.Services
     {
         IResult<object> AddToDb(User user);
         IResult<string> Authenticate(string username, string password);
+        IResult<User> GetUserForUsername(string username);
     }
     public class UserService : IUserService
     {
@@ -47,25 +48,30 @@ namespace Digitalist_Data.Services
             if (result.Type == ResultType.Success && result.ReturnObj != null)
             {
                 var user = result.ReturnObj;
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
+                if (BCrypt.Net.BCrypt.Verify(password, user.Password))
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
                     {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                return new Result<string>("Token successfully created", ResultType.Success,
-                    tokenHandler.WriteToken(token));
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim(ClaimTypes.Name, user.Username)
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    return new Result<string>("Token successfully created", ResultType.Success,
+                        tokenHandler.WriteToken(token));
+                }
+                return new Result<string>("Incorrect Password or Username", ResultType.Error);
+                
             }
             return new Result<string>(result.Message, ResultType.Error);
         }
 
-        private IResult<User> GetUserForUsername(string username)
+        public IResult<User> GetUserForUsername(string username)
         {
             using var context = new ListContext();
             try
