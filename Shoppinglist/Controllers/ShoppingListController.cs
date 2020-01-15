@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Digitalist.Controllers;
 using Digitalist_Data.Dto;
@@ -130,6 +131,42 @@ namespace Shoppinglist.Controllers
                     if (list.UserId == userResult.ReturnObj.Id)
                     {
                         return Ok(new ShoppingListDto(list));
+                    }
+
+                    return Unauthorized("List does not belong to the User");
+                }
+
+                return BadRequest(listResult.Message);
+            }
+            return BadRequest(userResult.ReturnObj);
+        }
+        [HttpGet]
+        [Authorize]
+        [Route("[controller]/getAsFile")]
+        public IActionResult GetListAsFile(int listId)
+        {
+            var username = User?.Identity?.Name;
+            var userResult = _userService?.GetUserForUsername(username);
+            if (userResult?.Type == ResultType.Success)
+            {
+                var listResult = _shoppingListService.GetListForId(listId);
+                if (listResult.Type == ResultType.Success)
+                {
+                    var list = listResult.ReturnObj;
+                    if (list.UserId == userResult.ReturnObj.Id)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        builder.Append(list.Listname);
+                        builder.Append("\n\n");
+                        foreach (var item in list.ListItems)
+                        {
+                            builder.Append(item.Itemname);
+                            builder.Append("\n");
+                        }
+
+                        var str = builder.ToString();
+                        var bytes = Encoding.ASCII.GetBytes(str);
+                        return File(bytes, "application/octet-stream", list.Listname + ".txt");
                     }
 
                     return Unauthorized("List does not belong to the User");
