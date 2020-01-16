@@ -138,7 +138,7 @@ namespace Shoppinglist.Controllers
 
                 return BadRequest(listResult.Message);
             }
-            return BadRequest(userResult.ReturnObj);
+            return BadRequest(userResult.Message);
         }
         [HttpGet]
         [Authorize]
@@ -174,7 +174,7 @@ namespace Shoppinglist.Controllers
 
                 return BadRequest(listResult.Message);
             }
-            return BadRequest(userResult.ReturnObj);
+            return BadRequest(userResult.Message);
         }
 
         [HttpPost]
