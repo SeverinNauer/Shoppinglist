@@ -11,6 +11,7 @@ namespace Digitalist_Data.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int UserId { get; set; }
+        public bool IsFavourite { get; set; }
         public User User { get; set; }
         [Required]
         public string Listname { get; set; }

@@ -21,6 +21,7 @@ namespace Digitalist_Data.Services
         IResult<ShoppingList> RenameList(int listId, User user, string listName);
         IResult<ShoppingList> ChangeItemIsChecked(int listId, User user, int itemId, bool isChecked);
         IResult<ShoppingList> ChangeItemName(int listId, User user, int itemId, string itemName);
+        IResult<ShoppingList> ChangeListIsFavourite(int listId, User user, bool isFavourite);
     }
 
     public class ShoppingListService : IShoppingListService
@@ -36,7 +37,8 @@ namespace Digitalist_Data.Services
             var newList = new ShoppingList()
             {
                 Listname = listname,
-                UserId = user.Id
+                UserId = user.Id,
+                IsFavourite = false
             };
             var result = AddToDb(newList);
             return result;
@@ -183,6 +185,27 @@ namespace Digitalist_Data.Services
             catch (Exception ex)
             {
                 return new Result<ShoppingList>($"An Error in checking the state to {isChecked} occured: \n {ex.Message}", ResultType.Error);
+            }
+        }
+
+        public IResult<ShoppingList> ChangeListIsFavourite(int listId, User user, bool isFavourite)
+        {
+            using var context = new ListContext();
+            try
+            {
+                var list = context?.ShoppingList?.Include(list => list.ListItems).FirstOrDefault(list => list.Id == listId && list.UserId == user.Id);
+                if (list != null)
+                {
+                    list.IsFavourite = isFavourite;
+                    context.Update(list);
+                    context.SaveChanges();
+                    return new Result<ShoppingList>($"list isFavourite state was set to {isFavourite}", ResultType.Success, list);
+                }
+                return new Result<ShoppingList>("No List for this Id and User was found", ResultType.Error);
+            }
+            catch (Exception ex)
+            {
+                return new Result<ShoppingList>($"An Error in checking the state to {isFavourite} occured: \n {ex.Message}", ResultType.Error);
             }
         }
 

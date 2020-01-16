@@ -165,7 +165,7 @@ namespace Shoppinglist.Controllers
                         }
 
                         var str = builder.ToString();
-                        var bytes = Encoding.ASCII.GetBytes(str);
+                        var bytes = Encoding.UTF8.GetBytes(str);
                         return File(bytes, "application/octet-stream", list.Listname + ".txt");
                     }
 
@@ -195,8 +195,8 @@ namespace Shoppinglist.Controllers
                 return BadRequest(deleteResult.Message);
             }
             return BadRequest(userResult.Message);
-        }        
-        
+        }
+
         [HttpPost]
         [Authorize]
         [Route("[controller]/deleteItem")]
@@ -225,7 +225,7 @@ namespace Shoppinglist.Controllers
             var userResult = _userService?.GetUserForUsername(username);
             if (userResult?.Type == ResultType.Success)
             {
-                var listResult = _shoppingListService.RenameList(model.ListId,userResult.ReturnObj,model.ListName);
+                var listResult = _shoppingListService.RenameList(model.ListId, userResult.ReturnObj, model.ListName);
                 if (listResult.Type == ResultType.Success)
                 {
                     return Ok(new ShoppingListDto(listResult.ReturnObj));
@@ -244,7 +244,7 @@ namespace Shoppinglist.Controllers
             var userResult = _userService?.GetUserForUsername(username);
             if (userResult?.Type == ResultType.Success)
             {
-                var listResult = _shoppingListService.ChangeItemIsChecked(model.ListId,userResult.ReturnObj,model.ItemId, model.IsChecked);
+                var listResult = _shoppingListService.ChangeItemIsChecked(model.ListId, userResult.ReturnObj, model.ItemId, model.IsChecked);
                 if (listResult.Type == ResultType.Success)
                 {
                     return Ok(new ShoppingListDto(listResult.ReturnObj));
@@ -252,8 +252,27 @@ namespace Shoppinglist.Controllers
                 return BadRequest(listResult.Message);
             }
             return BadRequest(userResult.Message);
-        }        
-        
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("[controller]/changeListIsFavourite")]
+        public IActionResult ChangeListIsFavourite([FromBody] ChangeListIsFavouriteModel model)
+        {
+            var username = User?.Identity?.Name;
+            var userResult = _userService?.GetUserForUsername(username);
+            if (userResult?.Type == ResultType.Success)
+            {
+                var listResult = _shoppingListService.ChangeListIsFavourite(model.ListId, userResult.ReturnObj, model.IsFavourite);
+                if (listResult.Type == ResultType.Success)
+                {
+                    return Ok(new ShoppingListDto(listResult.ReturnObj));
+                }
+                return BadRequest(listResult.Message);
+            }
+            return BadRequest(userResult.Message);
+        }
+
         [HttpPut]
         [Authorize]
         [Route("[controller]/changeItemName")]
@@ -263,7 +282,7 @@ namespace Shoppinglist.Controllers
             var userResult = _userService?.GetUserForUsername(username);
             if (userResult?.Type == ResultType.Success)
             {
-                var listResult = _shoppingListService.ChangeItemName(model.ListId,userResult.ReturnObj,model.ItemId, model.Itemname);
+                var listResult = _shoppingListService.ChangeItemName(model.ListId, userResult.ReturnObj, model.ItemId, model.Itemname);
                 if (listResult.Type == ResultType.Success)
                 {
                     return Ok(new ShoppingListDto(listResult.ReturnObj));
@@ -318,7 +337,13 @@ namespace Shoppinglist.Controllers
             [Required(ErrorMessage = "ItemId is required")]
             public int ItemId { get; set; }
             public bool IsChecked { get; set; }
-        }        
+        }
+        public class ChangeListIsFavouriteModel
+        {
+            [Required(ErrorMessage = "ListId is required")]
+            public int ListId { get; set; }
+            public bool IsFavourite { get; set; }
+        }
         public class ChangeItemnameModel
         {
             [Required(ErrorMessage = "ListId is required")]
